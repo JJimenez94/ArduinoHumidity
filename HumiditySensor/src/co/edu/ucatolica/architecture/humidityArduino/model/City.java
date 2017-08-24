@@ -24,6 +24,11 @@ public class City implements Serializable {
 	@OneToMany(mappedBy="city")
 	private List<Capturedhumidity> capturedhumidities;
 
+	//bi-directional many-to-one association to Department
+	@ManyToOne
+	@JoinColumn(name="department_id")
+	private Department department;
+
 	public City() {
 	}
 
@@ -63,6 +68,14 @@ public class City implements Serializable {
 		capturedhumidity.setCity(null);
 
 		return capturedhumidity;
+	}
+
+	public Department getDepartment() {
+		return this.department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 }

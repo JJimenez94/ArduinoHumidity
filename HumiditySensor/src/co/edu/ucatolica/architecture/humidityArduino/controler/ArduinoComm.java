@@ -1,8 +1,8 @@
 package co.edu.ucatolica.architecture.humidityArduino.controler;
 
-import gnu.io.*;
 import java.io.*;
 import java.util.*;
+import gnu.io.*;
 
 public class ArduinoComm {
 	//static Enumeration portList;

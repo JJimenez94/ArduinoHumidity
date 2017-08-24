@@ -3,6 +3,7 @@
 	<persistence-unit name="HumiditySensor" transaction-type="RESOURCE_LOCAL">
 		<class>co.edu.ucatolica.architecture.humidityArduino.model.Capturedhumidity</class>
 		<class>co.edu.ucatolica.architecture.humidityArduino.model.City</class>
+		<class>co.edu.ucatolica.architecture.humidityArduino.model.Department</class>
 		<properties>
 		<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://arquitect.czqz6npb2wju.us-east-1.rds.amazonaws.com:5432/ARQUITECTURA_SOFTWARE" />
