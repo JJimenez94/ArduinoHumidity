@@ -124,7 +124,7 @@ public class MainView {
 			this.getLblCapturedCity();
 		}
 		if (this.getLblReportedHumidity() == null) {
-			lblReportedHumidity = new JLabel();
+			lblReportedHumidity = new JLabel("Esperando datos");
 			this.setLblReportedHumidity(lblReportedHumidity);
 		} else {
 			this.getLblReportedHumidity();

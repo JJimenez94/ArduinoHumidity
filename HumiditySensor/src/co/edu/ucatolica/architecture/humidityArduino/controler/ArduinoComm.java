@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
 
+import javax.swing.JLabel;
+
+import co.edu.ucatolica.architecture.humidityArduino.model.City;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
@@ -28,12 +31,50 @@ public class ArduinoComm implements SerialPortEventListener {
 	private static final int TIME_OUT = 2000;
 	// Bits per second used in the communication process with Arduino.
 	private static final int DATA_RATE = 9600;
-	// save the used port
+	// Save the used port
 	private SerialPort usedPort;
+	// Data transition variables
+	private Integer humidityTx;
+	private PostgreComm db;
+	private City city;
+	// Update the humidity label
+	private JLabel toWrite;
 
 	/* Variable definition ends */
 
-	private void HumidityReader() {
+	public Integer getHumidityTx() {
+		return humidityTx;
+	}
+
+	public void setHumidityTx(Integer humidityTx) {
+		this.humidityTx = humidityTx;
+	}
+
+	public PostgreComm getDb() {
+		return db;
+	}
+
+	public void setDb(PostgreComm db) {
+		this.db = db;
+	}
+
+	public JLabel getToWrite() {
+		return toWrite;
+	}
+
+	public void setToWrite(JLabel toWrite) {
+		this.toWrite = toWrite;
+	}
+	
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City loaded) {
+		this.city = loaded;
+	}
+
+	public void HumidityReader() {
 		CommPortIdentifier portId = null;
 		Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 		System.out.println("Validando los puertos disponibles");
@@ -60,7 +101,7 @@ public class ArduinoComm implements SerialPortEventListener {
 			usedPort.setSerialPortParams(DATA_RATE, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 			// Setting up timeOut
-			usedPort.enableReceiveTimeout(3000);
+			usedPort.enableReceiveTimeout(2000);
 			usedPort.enableReceiveThreshold(0);
 			// open the streams
 			input = new BufferedReader(new InputStreamReader(usedPort.getInputStream()));
@@ -69,8 +110,9 @@ public class ArduinoComm implements SerialPortEventListener {
 			// add event listeners
 			usedPort.addEventListener(this);
 			usedPort.notifyOnDataAvailable(true);
+
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			System.err.println(e.toString());			
 		}
 	}
 
@@ -86,9 +128,16 @@ public class ArduinoComm implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String humidity = input.readLine();
-				System.out.println(humidity);
+				if (!humidity.equals(null)) {
+					System.out.println(humidity);
+					Double tempDouble = Double.parseDouble(humidity);
+					getToWrite().setText(humidity);
+					if(!getCity().equals(null)) {
+						getDb().insertHumidity(tempDouble.intValue(), getCity());						
+					}					
+				}
 			} catch (Exception e) {
-				System.err.println(e.toString());
+				System.err.println(e.toString());				
 			}
 		}
 	}

@@ -15,9 +15,10 @@ public class Capturedhumidity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="id", insertable=false)
 	private Integer id;
 
-	@Column(name="captured_timestamp")
+	@Column(name="captured_timestamp", insertable=false)
 	private Timestamp capturedTimestamp;
 
 	@Column(name="humidity_percent")

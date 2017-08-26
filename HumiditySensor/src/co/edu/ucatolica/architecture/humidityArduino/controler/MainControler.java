@@ -4,6 +4,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import co.edu.ucatolica.architecture.humidityArduino.model.City;
 import co.edu.ucatolica.architecture.humidityArduino.model.Department;
 import co.edu.ucatolica.architecture.humidityArduino.view.MainView;
@@ -28,18 +30,23 @@ public class MainControler implements ItemListener {
 		dbComm = new PostgreComm();
 		arduino = new ArduinoComm();
 		additionalBehaviors();
+		arduino.HumidityReader();
 	}
 
 	public void additionalBehaviors() {
+		loadLists();
 		window.getCmbDepartments().addItemListener(this);
-		// window.getCmbCities().addItemListener(this);
+		window.getCmbCities().addItemListener(this);
 		chargeCmbDepartament();
-		loadCities();
+		JOptionPane.showMessageDialog(window.getFrame(),
+				"Debe seleccionar una ciudad para que se carguen los datos a la base de datos, de lo contrario la captura de humedad será descartada",
+				"Confirmación de ciudad", JOptionPane.WARNING_MESSAGE);		
+		arduino.setDb(getDbComm());
+		arduino.setToWrite(window.getLblReportedHumidity());
 		window.getFrame().setVisible(true);
 	}
 
 	private void chargeCmbDepartament() {
-		initialDepartments = dbComm.getDepartmentByNames();
 		for (Department e : initialDepartments) {
 			window.getCmbDepartments().addItem(e.getName());
 		}
@@ -47,11 +54,12 @@ public class MainControler implements ItemListener {
 		window.getCmbCities().setEnabled(false);
 	}
 
-	public void loadCities() {
+	public void loadLists() {
+		initialDepartments = dbComm.getDepartmentByNames();
 		initialCitys = dbComm.getCityList();
 	}
 
-	public void chargeCmbCity(Object department) {		
+	public void chargeCmbCity(Object department) {
 		for (City c : initialCitys) {
 			if (c.getDepartment().getName() == department.toString()) {
 				window.getCmbCities().addItem(c.getName());
@@ -61,22 +69,32 @@ public class MainControler implements ItemListener {
 		window.getCmbCities().setEnabled(true);
 	}
 
+	public City getLoadedCity() {
+		for (City c : initialCitys) {
+			if (window.getCmbCities().getSelectedItem().toString().equals(c.getName())) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public PostgreComm getDbComm() {
+		return dbComm;
+	}
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			System.out.println(e.getClass());
-			System.out.println(e.getItemSelectable());
-			System.out.println(e.getItem());
 			if (e.getItemSelectable() == window.getCmbDepartments()) {
-				System.out.println("Cambia la selección de departamentos el departamento seleccionado es: "
-						+ window.getCmbDepartments().getSelectedItem());
 				System.out.println("Actualizando la lista de ciudades disponibles");
 				try {
 					window.getCmbCities().removeAllItems();
 					chargeCmbCity(window.getCmbDepartments().getSelectedItem());
 				} catch (Exception ex) {
-					System.out.println(ex.getMessage());
+					System.out.println(ex.toString());					
 				}
+			} else if (e.getItemSelectable() == window.getCmbCities()) {
+				arduino.setCity(getLoadedCity());
 			}
 		}
 	}
