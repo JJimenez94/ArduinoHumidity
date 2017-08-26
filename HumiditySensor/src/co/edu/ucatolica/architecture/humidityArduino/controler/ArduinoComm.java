@@ -1,12 +1,20 @@
 package co.edu.ucatolica.architecture.humidityArduino.controler;
 
-import java.io.*;
-import java.util.*;
-import gnu.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.Enumeration;
+
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 
 public class ArduinoComm implements SerialPortEventListener {
 
-	/* Variable definition start */
+	/*
+	 * Variable definition start
+	 */
 	// Ports used by Arduino to establish SO connection
 	private static final String PORT_NAMES[] = { "/dev/tty.usbserial-A9007UX1", // Mac OS X
 			"/dev/ttyACM0", // Raspberry Pi
@@ -83,12 +91,6 @@ public class ArduinoComm implements SerialPortEventListener {
 				System.err.println(e.toString());
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ArduinoComm test = new ArduinoComm();
-		test.HumidityReader();
 	}
 
 }
