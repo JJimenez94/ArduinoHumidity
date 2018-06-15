@@ -8,5 +8,4 @@ Repo for stuff related with the Software's Architecture signature project
   3. Added Functionalities: Individual controlers for GUI, DB, Arduino.
   4. Arduino code uploaded and improvements of JPA management
 
-###### Disclaimer: everytime you modify some file of the project please replace it on the repository, don't upload unfinished changes, or compilations errors
-
+###### Disclaimer: everytime you modify some file of the project please replace it on the repository, don't upload unfinished changes, or compilations errors. If you wanna take my codesource you can do it as is, i'm not made responsible of some harm relationed about it, i'm gonna be grateful for your mention to my work if you take the codesource, all the projects contained on this repository are made for academic purposes.
