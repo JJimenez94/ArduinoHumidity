@@ -1,5 +1,5 @@
 ### Why so wet?
-Private repo for stuff related with the Software Architecture project
+Repo for stuff related with the Software's Architecture signature project
 
 #### Advice/Anouncement section:
   1. initial commit: Charge the README and Entity Relationship Model of the project ~ For reference the ERM was made in https://www.draw.io/ ~
